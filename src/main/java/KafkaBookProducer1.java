@@ -2,7 +2,6 @@ import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 
 public class KafkaBookProducer1 {
 
@@ -14,10 +13,8 @@ public class KafkaBookProducer1 {
 
         Producer<String, String> producer = new KafkaProducer<>(props);
         try {
-            RecordMetadata metadata = producer.send(
-                new ProducerRecord<String, String>("peter-topic",
-                    "Apache Kafka is a distributed streaming platform")).get();
-            System.out.printf("Partition: %d, Offset: %d", metadata.partition(), metadata.offset());
+            producer.send(new ProducerRecord<String, String>("peter-topic",
+                "Apache Kafka is a distributed streaming platform"), new PeterCallback());
         } catch (Exception exception) {
             exception.printStackTrace();
         } finally {
